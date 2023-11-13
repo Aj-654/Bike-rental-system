@@ -1,0 +1,6 @@
+ID,model,Price,Availability
+1,Model A,1000,True
+2,Model B,2000,False
+3,Model C,1500,True
+4,Model D,2500,True
+5,Model E,1800,False
