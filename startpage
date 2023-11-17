@@ -1,0 +1,109 @@
+from tkinter import *
+from tkinter import messagebox
+import PIL as pillow
+from PIL import Image,ImageTk
+import customerpage as cust
+import admin as adm
+import mysql.connector
+
+
+
+startwindow = Tk()
+startwindow.title("Welcome to Bike Rental System")
+startwindow.geometry("1920x1080")
+windowbg = PhotoImage(file="D:\SEM4 MINI PROJECT\startbg2.png")
+
+
+bglabel = Label(startwindow,image=windowbg)
+bglabel.place(x=0,y=0,relheight=1,relwidth=1)
+titlebg = PhotoImage(file="D:\SEM4 MINI PROJECT\header.png")
+titlelabel = Label(startwindow, text="BIKE RENTAL SYSTEM",font=("helvetica",100,"bold italic"),fg="#FF7B27",bg="black")
+titlelabel.pack()
+
+custlabel = Label(startwindow,text ="Customer Login", font=("Baskerville Old Face",28,"bold"),fg="white",bg="black")
+custlabel.place(x=240,y=200)
+
+namelabel = Label(startwindow,text="email-id:", font=("Baskerville Old Face",22,"bold"),fg="white",bg="black")
+namelabel.place(x=80,y=280)
+
+e1 = Entry(startwindow,width=28,font=("Baskerville Old Face",22))
+e1.place(x=220,y=280)
+
+passwordlabel = Label(startwindow,text="Password:", font=("Baskerville Old Face",22,"bold"),fg="white",bg="black")
+passwordlabel.place(x=80,y=350)
+
+e2 = Entry(startwindow,width=28,font=("Baskerville Old Face",22))
+e2.place(x=220,y=350)
+
+def userlogin():
+    userid = e1.get()
+    password = e2.get()
+    if(userid=="" or password==""):
+        print(password)
+        messagebox.showinfo("Error","Both details need to be entered")
+
+    else:
+        connection = mysql.connector.connect(host="localhost",database="bike_rental_database",user="root",password="root")
+        cursor = connection.cursor()
+        query= "select email from customers where email=%s and password=%s"
+        value= (e1.get(),e2.get())
+        cursor.execute(query,value)
+        row = cursor.fetchone()
+        if row!=None:
+            messagebox.showinfo("Success!","You have successfully logged in.")
+            newWindow = Toplevel(startwindow)
+            newWindow.geometry("1920x1080")
+            customerpg = cust(newWindow)
+
+
+
+submitbutton = Button(startwindow,text="Submit",font=("Baskerville Old Face",22),activebackground = "grey",command=userlogin).place(x=300,y=430)
+
+registerlabel = Label(startwindow,text ="Not a Customer? Register first.", font=("Baskerville Old Face",22,"bold"),fg="white",bg="black")
+registerlabel.place(x=180,y=530)
+
+registerbutton = Button(startwindow,text="Register",font=("Baskerville Old Face",22),activebackground = "grey").place(x=295,y=580)
+
+
+adminlabel = Label(startwindow,text ="Admin Login", font=("Baskerville Old Face",28,"bold"),fg="white",bg="black")
+adminlabel.place(x=960,y=200)
+
+namelabel = Label(startwindow,text="email-id:", font=("Baskerville Old Face",22,"bold"),fg="white",bg="black")
+namelabel.place(x=780,y=280)
+
+e3 = Entry(startwindow,width=28,font=("Baskerville Old Face",22))
+e3.place(x=910,y=280)
+
+passwordlabel = Label(startwindow,text="Password:", font=("Baskerville Old Face",22,"bold"),fg="white",bg="black")
+passwordlabel.place(x=780,y=350)
+
+e4 = Entry(startwindow,width=28,font=("Baskerville Old Face",22))
+e4.place(x=910,y=350)
+
+def adminlogin():
+    emailid = e3.get()
+    password = e4.get()
+    if(emailid=="" or password==""):
+        print(password)
+        messagebox.showinfo("Error","Both details need to be entered")
+
+    else:
+        connection = mysql.connector.connect(host="localhost",database="bike_rental_database",user="root",password="root")
+        cursor = connection.cursor()
+        query= "select emailid from admin where emailid=%s and password=%s"
+        value= (e3.get(),e4.get())
+        cursor.execute(query,value)
+        row = cursor.fetchone()
+        if row!=None:
+            messagebox.showinfo("Success!","You have successfully logged in.")
+            newWindow = Toplevel(startwindow)
+            newWindow.geometry("1920x1080")
+            adminpg = adm(newWindow)
+
+
+submitbutton2 = Button(startwindow,text="Submit",font=("Baskerville Old Face",22),activebackground = "grey",command=adminlogin).place(x=1000,y=430)
+
+
+
+startwindow.mainloop()
+
